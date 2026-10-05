@@ -11,6 +11,9 @@ IMAGE_PATH = Path(__file__).resolve().with_name('sonic-sprite.png')
 
 def main():
     """Run the animation viewer."""
+    if not IMAGE_PATH.is_file():
+        raise FileNotFoundError(f'스프라이트 이미지를 찾을 수 없습니다: {IMAGE_PATH}')
+
     open_canvas(WINDOW_WIDTH, WINDOW_HEIGHT)
     try:
         running = True
