@@ -9,12 +9,14 @@ WINDOW_HEIGHT = 800
 def main():
     """Run the animation viewer."""
     open_canvas(WINDOW_WIDTH, WINDOW_HEIGHT)
-    running = True
-    while running:
-        for event in get_events():
-            if event.type == SDL_QUIT:
-                running = False
-    close_canvas()
+    try:
+        running = True
+        while running:
+            for event in get_events():
+                if event.type == SDL_QUIT:
+                    running = False
+    finally:
+        close_canvas()
 
 
 if __name__ == '__main__':
