@@ -58,16 +58,21 @@ def main():
         sprite_sheet = load_image(str(IMAGE_PATH))
         last_time = get_time()
         frame_elapsed = 0.0
+        frame_index = 0
         running = True
         while running:
             now = get_time()
             frame_elapsed += now - last_time
             last_time = now
+            frame_duration = 1.0 / ANIMATION_PLAN[0][4]
+            while frame_elapsed >= frame_duration:
+                frame_elapsed -= frame_duration
+                frame_index = (frame_index + 1) % ANIMATION_PLAN[0][3]
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
             clear_canvas()
-            draw_frame(sprite_sheet, 0, 0)
+            draw_frame(sprite_sheet, 0, frame_index)
             update_canvas()
             delay(0.01)
     finally:
