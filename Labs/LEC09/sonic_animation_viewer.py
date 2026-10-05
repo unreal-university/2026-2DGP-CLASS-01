@@ -71,6 +71,7 @@ def main():
         frame_index = 0
         completed_loops = 0
         playing = True
+        pause_started = None
         running = True
         while running:
             now = get_time()
@@ -84,10 +85,13 @@ def main():
                     completed_loops += 1
                     if completed_loops == 5:
                         playing = False
+                        pause_started = now
+                        frame_elapsed = 0.0
                     else:
                         frame_index = 0
                 else:
                     frame_index += 1
+            pause_ready = not playing and now - pause_started >= 1.0
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
