@@ -2,10 +2,14 @@
 
 from pathlib import Path
 
-from pico2d import open_canvas, close_canvas, get_events, load_image, SDL_QUIT
+from pico2d import (
+    SDL_QUIT, clear_canvas, close_canvas, delay, get_events, load_image,
+    open_canvas, update_canvas,
+)
 
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 800
+SHEET_HEIGHT = 525
 IMAGE_PATH = Path(__file__).resolve().with_name('sonic-sprite.png')
 
 # 시트 위에서 아래로 배치된 소닉 동작. 마지막 장식/크레딧 행은 제외한다.
@@ -45,6 +49,14 @@ def main():
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
+            top, bottom, edges = ROW_LAYOUTS[0]
+            clear_canvas()
+            sprite_sheet.clip_draw(
+                edges[0], SHEET_HEIGHT - bottom, edges[1] - edges[0],
+                bottom - top, WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2,
+            )
+            update_canvas()
+            delay(0.01)
     finally:
         close_canvas()
 
