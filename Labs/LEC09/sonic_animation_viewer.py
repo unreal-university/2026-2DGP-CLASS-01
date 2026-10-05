@@ -10,6 +10,7 @@ from pico2d import (
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 800
 SHEET_HEIGHT = 525
+SPRITE_SCALE = 8
 IMAGE_PATH = Path(__file__).resolve().with_name('sonic-sprite.png')
 
 # 시트 위에서 아래로 배치된 소닉 동작. 마지막 장식/크레딧 행은 제외한다.
@@ -54,6 +55,8 @@ def main():
             sprite_sheet.clip_draw(
                 edges[0], SHEET_HEIGHT - bottom, edges[1] - edges[0],
                 bottom - top, WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2,
+                (edges[1] - edges[0]) * SPRITE_SCALE,
+                (bottom - top) * SPRITE_SCALE,
             )
             update_canvas()
             delay(0.01)
