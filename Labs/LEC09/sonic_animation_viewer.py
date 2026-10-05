@@ -35,7 +35,7 @@ ANIMATION_PLAN = (
 # 각 프레임은 이 경계 안에서 잘라 인접한 그림을 포함하지 않는다.
 ROW_LAYOUTS = (
     (36, 75, (0, 29, 57, 85, 115, 145, 182, 211, 238, 265, 299, 334)),
-    (80, 117, (0, 34, 64, 96, 136, 169, 203, 236, 258, 295, 334, 370, 399)),
+    (80, 117, (0, 34, 64, 96, 132, 169, 203, 236, 264, 295, 334, 370, 399)),
     (118, 165, (0, 37, 84, 127, 176, 222, 265)),
     (166, 204, (0, 33, 65, 97, 130, 161, 192, 226, 265, 300)),
     (205, 238, (0, 34, 68, 102, 137, 171, 210)),
@@ -45,6 +45,12 @@ ROW_LAYOUTS = (
     (376, 421, (0, 30, 63, 97, 134, 172, 212, 251, 290)),
     (423, 468, (0, 44, 93, 123, 150)),
 )
+
+# 맞닿아 있는 그림의 잔상을 피하기 위해 일부 프레임만 별도로 좁힌다.
+FRAME_BOUNDS = {
+    (0, 7): (211, 235),
+    (1, 4): (136, 169),
+}
 
 
 def validate_animation_data():
@@ -71,7 +77,9 @@ def validate_animation_data():
 def draw_frame(sprite_sheet, row_index, frame_index):
     """Draw a frame around the same screen center regardless of its width."""
     top, bottom, edges = ROW_LAYOUTS[row_index]
-    left, right = edges[frame_index:frame_index + 2]
+    left, right = FRAME_BOUNDS.get(
+        (row_index, frame_index), edges[frame_index:frame_index + 2]
+    )
     sprite_sheet.clip_draw(
         left, SHEET_HEIGHT - bottom, right - left, bottom - top,
         WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2,
