@@ -47,6 +47,27 @@ ROW_LAYOUTS = (
 )
 
 
+def validate_animation_data():
+    """Check every Sonic frame is included exactly once in the plan."""
+    available = set()
+    for row, (top, bottom, edges) in enumerate(ROW_LAYOUTS):
+        if not (0 <= top < bottom <= SHEET_HEIGHT):
+            raise ValueError(f'{row}번 행의 세로 좌표가 잘못되었습니다.')
+        if edges[0] < 0 or edges[-1] > SHEET_WIDTH or any(
+            left >= right for left, right in zip(edges, edges[1:])
+        ):
+            raise ValueError(f'{row}번 행의 가로 좌표가 잘못되었습니다.')
+        available.update((row, frame) for frame in range(len(edges) - 1))
+
+    planned = []
+    for name, row, start, end, fps in ANIMATION_PLAN:
+        if row >= len(ROW_LAYOUTS) or fps <= 0 or start < 0 or start >= end:
+            raise ValueError(f'{name} 동작 설정이 잘못되었습니다.')
+        planned.extend((row, frame) for frame in range(start, end))
+    if len(planned) != len(available) or set(planned) != available:
+        raise ValueError('동작 목록에 빠지거나 중복된 프레임이 있습니다.')
+
+
 def draw_frame(sprite_sheet, row_index, frame_index):
     """Draw a frame around the same screen center regardless of its width."""
     top, bottom, edges = ROW_LAYOUTS[row_index]
@@ -60,6 +81,7 @@ def draw_frame(sprite_sheet, row_index, frame_index):
 
 def main():
     """Run the animation viewer."""
+    validate_animation_data()
     if not IMAGE_PATH.is_file():
         raise FileNotFoundError(f'스프라이트 이미지를 찾을 수 없습니다: {IMAGE_PATH}')
 
