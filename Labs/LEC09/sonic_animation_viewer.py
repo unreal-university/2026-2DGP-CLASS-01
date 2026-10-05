@@ -92,6 +92,14 @@ def main():
                 else:
                     frame_index += 1
             pause_ready = not playing and now - pause_started >= 1.0
+            if pause_ready:
+                animation_index = (animation_index + 1) % len(ANIMATION_PLAN)
+                frame_index = 0
+                completed_loops = 0
+                frame_elapsed = 0.0
+                playing = True
+                pause_started = None
+                _, row, start, _, _ = ANIMATION_PLAN[animation_index]
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
