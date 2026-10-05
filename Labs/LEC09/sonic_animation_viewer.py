@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from pico2d import (
-    SDL_QUIT, clear_canvas, close_canvas, delay, get_events, load_image,
+    SDL_QUIT, clear_canvas, close_canvas, delay, get_events, get_time, load_image,
     open_canvas, update_canvas,
 )
 
@@ -56,8 +56,13 @@ def main():
     open_canvas(WINDOW_WIDTH, WINDOW_HEIGHT)
     try:
         sprite_sheet = load_image(str(IMAGE_PATH))
+        last_time = get_time()
+        frame_elapsed = 0.0
         running = True
         while running:
+            now = get_time()
+            frame_elapsed += now - last_time
+            last_time = now
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
