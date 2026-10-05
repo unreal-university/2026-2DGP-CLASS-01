@@ -67,21 +67,23 @@ def main():
         sprite_sheet = load_image(str(IMAGE_PATH))
         last_time = get_time()
         frame_elapsed = 0.0
+        animation_index = 0
         frame_index = 0
         running = True
         while running:
             now = get_time()
             frame_elapsed += now - last_time
             last_time = now
-            frame_duration = 1.0 / ANIMATION_PLAN[0][4]
+            name, row, start, end, fps = ANIMATION_PLAN[animation_index]
+            frame_duration = 1.0 / fps
             while frame_elapsed >= frame_duration:
                 frame_elapsed -= frame_duration
-                frame_index = (frame_index + 1) % ANIMATION_PLAN[0][3]
+                frame_index = (frame_index + 1) % (end - start)
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
             clear_canvas()
-            draw_frame(sprite_sheet, 0, frame_index)
+            draw_frame(sprite_sheet, row, start + frame_index)
             update_canvas()
             delay(0.01)
     finally:
