@@ -11,7 +11,7 @@ WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 800
 SHEET_WIDTH = 399
 SHEET_HEIGHT = 525
-SPRITE_SCALE = 8
+SPRITE_SCALE = 4
 IMAGE_PATH = Path(__file__).resolve().with_name('sonic-sprite.png')
 
 # 시트 위에서 아래로 배치된 소닉 동작. 마지막 장식/크레딧 행은 제외한다.
