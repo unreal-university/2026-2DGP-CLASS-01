@@ -69,6 +69,8 @@ def main():
         frame_elapsed = 0.0
         animation_index = 0
         frame_index = 0
+        completed_loops = 0
+        playing = True
         running = True
         while running:
             now = get_time()
@@ -76,9 +78,16 @@ def main():
             last_time = now
             name, row, start, end, fps = ANIMATION_PLAN[animation_index]
             frame_duration = 1.0 / fps
-            while frame_elapsed >= frame_duration:
+            while playing and frame_elapsed >= frame_duration:
                 frame_elapsed -= frame_duration
-                frame_index = (frame_index + 1) % (end - start)
+                if frame_index == end - start - 1:
+                    completed_loops += 1
+                    if completed_loops == 5:
+                        playing = False
+                    else:
+                        frame_index = 0
+                else:
+                    frame_index += 1
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
