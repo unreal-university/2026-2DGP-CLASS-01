@@ -49,7 +49,9 @@ ROW_LAYOUTS = (
 # 맞닿아 있는 그림의 잔상을 피하기 위해 일부 프레임만 별도로 좁힌다.
 FRAME_BOUNDS = {
     (0, 7): (211, 235),
+    (1, 3): (96, 128),
     (1, 4): (136, 169),
+    (1, 7): (236, 260),
 }
 
 
@@ -72,6 +74,9 @@ def validate_animation_data():
         planned.extend((row, frame) for frame in range(start, end))
     if len(planned) != len(available) or set(planned) != available:
         raise ValueError('동작 목록에 빠지거나 중복된 프레임이 있습니다.')
+    for key, (left, right) in FRAME_BOUNDS.items():
+        if key not in available or not (0 <= left < right <= SHEET_WIDTH):
+            raise ValueError(f'{key} 프레임의 개별 좌표가 잘못되었습니다.')
 
 
 def draw_frame(sprite_sheet, row_index, frame_index):
