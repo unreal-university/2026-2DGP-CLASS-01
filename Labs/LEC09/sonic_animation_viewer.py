@@ -9,6 +9,7 @@ from pico2d import (
 
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 800
+SHEET_WIDTH = 399
 SHEET_HEIGHT = 525
 SPRITE_SCALE = 8
 IMAGE_PATH = Path(__file__).resolve().with_name('sonic-sprite.png')
@@ -65,6 +66,11 @@ def main():
     open_canvas(WINDOW_WIDTH, WINDOW_HEIGHT)
     try:
         sprite_sheet = load_image(str(IMAGE_PATH))
+        if (sprite_sheet.w, sprite_sheet.h) != (SHEET_WIDTH, SHEET_HEIGHT):
+            raise ValueError(
+                f'스프라이트 이미지 크기가 다릅니다: '
+                f'{sprite_sheet.w}x{sprite_sheet.h} (필요: {SHEET_WIDTH}x{SHEET_HEIGHT})'
+            )
         last_time = get_time()
         frame_elapsed = 0.0
         animation_index = 0
