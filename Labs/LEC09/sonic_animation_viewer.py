@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from pico2d import open_canvas, close_canvas, get_events, SDL_QUIT
+from pico2d import open_canvas, close_canvas, get_events, load_image, SDL_QUIT
 
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 800
@@ -16,6 +16,7 @@ def main():
 
     open_canvas(WINDOW_WIDTH, WINDOW_HEIGHT)
     try:
+        sprite_sheet = load_image(str(IMAGE_PATH))
         running = True
         while running:
             for event in get_events():
