@@ -37,6 +37,17 @@ ROW_LAYOUTS = (
 )
 
 
+def draw_frame(sprite_sheet, row_index, frame_index):
+    """Draw a frame around the same screen center regardless of its width."""
+    top, bottom, edges = ROW_LAYOUTS[row_index]
+    left, right = edges[frame_index:frame_index + 2]
+    sprite_sheet.clip_draw(
+        left, SHEET_HEIGHT - bottom, right - left, bottom - top,
+        WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2,
+        (right - left) * SPRITE_SCALE, (bottom - top) * SPRITE_SCALE,
+    )
+
+
 def main():
     """Run the animation viewer."""
     if not IMAGE_PATH.is_file():
@@ -50,14 +61,8 @@ def main():
             for event in get_events():
                 if event.type == SDL_QUIT:
                     running = False
-            top, bottom, edges = ROW_LAYOUTS[0]
             clear_canvas()
-            sprite_sheet.clip_draw(
-                edges[0], SHEET_HEIGHT - bottom, edges[1] - edges[0],
-                bottom - top, WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2,
-                (edges[1] - edges[0]) * SPRITE_SCALE,
-                (bottom - top) * SPRITE_SCALE,
-            )
+            draw_frame(sprite_sheet, 0, 0)
             update_canvas()
             delay(0.01)
     finally:
